@@ -1,4 +1,5 @@
 package com.hospital.controller;
+
 import com.hospital.dto.DepartmentDTO;
 import com.hospital.model.Department;
 import com.hospital.service.DepartmentService;
