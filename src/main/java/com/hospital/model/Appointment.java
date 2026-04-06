@@ -1,16 +1,11 @@
 package com.hospital.model;
 
 import jakarta.persistence.*;
-import lombok.*;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "appointments")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Appointment {
 
     @Id
@@ -18,34 +13,79 @@ public class Appointment {
     private Integer appointmentId;
 
     @ManyToOne
-    @JoinColumn(name = "patient_id", nullable = false)
+    @JoinColumn(name = "patient_id")
     private Patient patient;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = false)
+    @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
     @OneToOne
-    @JoinColumn(name = "schedule_id", nullable = false, unique = true)
+    @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    @Column(nullable = false)
-    private LocalDate appointmentDate;
+    private LocalDateTime appointmentDateTime;
 
     private String status;
 
-    @Column(columnDefinition = "TEXT")
-    private String reason;
+    private String notes;
 
-    private String medicalFile;
+    public Appointment() {
+    }
 
-    private LocalDateTime createdAt;
+    public Integer getAppointmentId() {
+        return appointmentId;
+    }
 
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();
-        if (status == null) {
-            status = "PENDING";
-        }
+    public void setAppointmentId(Integer appointmentId) {
+        this.appointmentId = appointmentId;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
+
+    public LocalDateTime getAppointmentDateTime() {
+        return appointmentDateTime;
+    }
+
+    public void setAppointmentDateTime(LocalDateTime appointmentDateTime) {
+        this.appointmentDateTime = appointmentDateTime;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
