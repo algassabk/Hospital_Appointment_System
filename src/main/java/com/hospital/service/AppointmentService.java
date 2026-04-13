@@ -1,8 +1,14 @@
 package com.hospital.service;
 
 import com.hospital.dto.AppointmentDTO;
-import com.hospital.model.*;
-import com.hospital.repository.*;
+import com.hospital.model.Appointment;
+import com.hospital.model.Doctor;
+import com.hospital.model.Patient;
+import com.hospital.model.Schedule;
+import com.hospital.repository.AppointmentRepository;
+import com.hospital.repository.DoctorRepository;
+import com.hospital.repository.PatientRepository;
+import com.hospital.repository.ScheduleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +21,10 @@ public class AppointmentService {
     private final DoctorRepository doctorRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public AppointmentService(
-            AppointmentRepository appointmentRepository,
-            PatientRepository patientRepository,
-            DoctorRepository doctorRepository,
-            ScheduleRepository scheduleRepository) {
-
+    public AppointmentService(AppointmentRepository appointmentRepository,
+                              PatientRepository patientRepository,
+                              DoctorRepository doctorRepository,
+                              ScheduleRepository scheduleRepository) {
         this.appointmentRepository = appointmentRepository;
         this.patientRepository = patientRepository;
         this.doctorRepository = doctorRepository;
@@ -28,7 +32,6 @@ public class AppointmentService {
     }
 
     public Appointment createAppointment(AppointmentDTO dto) {
-
         Patient patient = patientRepository.findById(dto.getPatientId()).orElse(null);
         Doctor doctor = doctorRepository.findById(dto.getDoctorId()).orElse(null);
         Schedule schedule = scheduleRepository.findById(dto.getScheduleId()).orElse(null);
@@ -57,6 +60,17 @@ public class AppointmentService {
     }
 
     public void deleteAppointment(Integer id) {
-        appointmentRepository.deleteById(id);
+        Appointment appointment = appointmentRepository.findById(id).orElse(null);
+
+        if (appointment == null) {
+            return;
+        }
+
+        if (appointment.getSchedule() != null) {
+            appointment.getSchedule().setAppointment(null);
+            scheduleRepository.save(appointment.getSchedule());
+        }
+
+        appointmentRepository.delete(appointment);
     }
 }
