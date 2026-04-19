@@ -40,6 +40,12 @@ public class AppointmentService {
             return null;
         }
 
+        if (!schedule.getIsAvailable()){
+            throw new RuntimeException("This time slot is already booked");
+        }
+        schedule.setIsAvailable(false);
+        scheduleRepository.save(schedule);
+
         Appointment appointment = new Appointment();
         appointment.setPatient(patient);
         appointment.setDoctor(doctor);

@@ -27,6 +27,9 @@ public class Schedule {
 
     private Boolean isAvailable = true;
 
+    @Version
+    private Integer version;
+
     @OneToOne(mappedBy = "schedule")
     private Appointment appointment;
 
