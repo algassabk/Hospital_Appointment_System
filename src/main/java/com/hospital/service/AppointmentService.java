@@ -36,11 +36,16 @@ public class AppointmentService {
         Doctor doctor = doctorRepository.findById(dto.getDoctorId()).orElse(null);
         Schedule schedule = scheduleRepository.findById(dto.getScheduleId()).orElse(null);
 
-        if (patient == null || doctor == null || schedule == null) {
-            return null;
+        if (patient == null) {
+            throw new RuntimeException("Patient not found");
         }
-
-        if (!schedule.getIsAvailable()){
+        if (doctor == null) {
+            throw new RuntimeException("Doctor not found");
+        }
+        if (schedule == null) {
+            throw new RuntimeException("Schedule not found");
+        }
+        if (!schedule.getIsAvailable()) {
             throw new RuntimeException("This time slot is already booked");
         }
         schedule.setIsAvailable(false);
